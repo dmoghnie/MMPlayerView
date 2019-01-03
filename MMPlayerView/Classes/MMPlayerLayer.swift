@@ -53,6 +53,7 @@ public class MMPlayerLayer: AVPlayerLayer {
         "playable",
         "hasProtectedContent",
         ]
+    fileprivate var httpHeaders: Any?
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
