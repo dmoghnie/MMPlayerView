@@ -53,7 +53,8 @@ public class MMPlayerLayer: AVPlayerLayer {
         "playable",
         "hasProtectedContent",
         ]
-    fileprivate var httpHeaders: Any?
+    public var httpHeaders: [String:String]?
+    
     lazy var tapGesture: UITapGestureRecognizer = {
         let g = UITapGestureRecognizer(target: self, action: #selector(MMPlayerLayer.touchAction(gesture:)))
         return g
@@ -174,7 +175,12 @@ public class MMPlayerLayer: AVPlayerLayer {
                 self.asset = (cacheItem.asset as? AVURLAsset)
                 self.player?.replaceCurrentItem(with: cacheItem)
             } else {
-                self.asset = AVURLAsset(url: url)
+                if let headerFields = self.httpHeaders {
+                    self.asset = AVURLAsset.init(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": headerFields])
+                }
+                else{
+                    self.asset = AVURLAsset(url: url)
+                }
 
                 self.asset?.loadValuesAsynchronously(forKeys: assetKeysRequiredToPlay) { [weak self] in
                     DispatchQueue.main.async {
